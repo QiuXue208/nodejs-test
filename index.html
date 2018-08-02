@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="./style.css" rel="stylesheet">
+</head>
+
+<body>
+    <p>总额：
+        <span id="amount">&&&amount&&&</span>
+    </p>
+    <button id="button">付款</button>
+    <script>
+        button.addEventListener('click', function () {
+            //用script发请求
+            let script = document.createElement('script')
+            script.src = '/pay'
+            document.body.appendChild(script)
+            script.onload = function(e){
+                e.currentTarget.remove()
+            }
+            script.onerror = function(e){
+                alert('付款失败')
+                e.currentTarget.remove()
+            }
+
+
+
+
+
+
+
+
+
+
+            //用img发请求
+
+            /*let image = document.createElement('img')
+            image.src = '/pay'
+            image.onload = function () {
+                alert('付款成功')
+               // window.location.reload()//帮用户刷新
+               amount.innerText = amount.innerText - 1
+            }//加载成功
+            image.onerror = function () {
+                alert('付款失败')
+            }//加载失败*/
+        })
+    </script>
+</body>
+
+</html>
