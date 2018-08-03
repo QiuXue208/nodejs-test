@@ -11,10 +11,12 @@ if(!port){
 var server = http.createServer(function(request, response){
   var parsedUrl = url.parse(request.url, true)
   var path = request.url 
-  var query = ''
-  if(path.indexOf('?') >= 0){ query = path.substring(path.indexOf('?')) }
+  var queryString = ''
+  if(path.indexOf('?') >= 0){
+     queryString = path.substring(path.indexOf('?'))
+  }
   var pathNoQuery = parsedUrl.pathname
-  var queryObject = parsedUrl.query
+  var query = parsedUrl.query
   var method = request.method
 
   /******** 从这里开始看，上面不要看 ************/
@@ -40,24 +42,23 @@ var server = http.createServer(function(request, response){
   }else if(path === '/pay'){
     var amount = fs.readFileSync('./db_price','utf8')//100
     var newAmount = parseInt(amount) - 1
+    response.setHeader('Content-Type','application/javascript')
     if(Math.random() > 0.5){
       fs.writeFileSync('./db_price',newAmount)
-      response.setHeader('Content-Type','application/javascript')
       response.statusCode = 200 //成功
-      response.write(`alert("付款成功")
-      amount.innerText = amount.innerText - 1
+      response.write(`
+      ${query.callback}.call(undefined,'success') 
       `)//会被当做JS处理
-
-      response.end()
     }else{
       response.statusCode = 400 //失败
-      response.write('failed')
+      response.write(`付款失败`)//会被当做JS处理
     }
     response.end()
   }else{
     response.statusCode = 404
     response.setHeader('Content-Type','text/html;charset=utf-8')
-    response.end('找不到对应路径')
+    response.write('找不到对应路径')
+    response.end()
   }
 
   /******** 代码结束，下面不要看 ************/

@@ -16,27 +16,25 @@
     <button id="button">付款</button>
     <script>
         button.addEventListener('click', function () {
+            let functionName = 'snowy' + parseInt(Math.random() * 100000,10)
+            window[functionName] = function(result){
+                alert('这是snow.com的前端代码')
+                alert(`付款结果是：${result}`)
+                amount.innerText -= 1
+            }
             //用script发请求
             let script = document.createElement('script')
-            script.src = '/pay'
+            script.src = 'http://flower.com:8002/pay?callback=' + functionName
             document.body.appendChild(script)
             script.onload = function(e){
                 e.currentTarget.remove()
+                delete window[functionName]
             }
             script.onerror = function(e){
                 alert('付款失败')
                 e.currentTarget.remove()
+                delete window[functionName]
             }
-
-
-
-
-
-
-
-
-
-
             //用img发请求
 
             /*let image = document.createElement('img')
